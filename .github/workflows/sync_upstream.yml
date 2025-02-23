@@ -27,4 +27,4 @@ jobs:
 
       - name: Push changes to fork
         run: |
-          git push origin main
+          git push origin master
