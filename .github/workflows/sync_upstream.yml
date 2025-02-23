@@ -1,0 +1,30 @@
+name: Sync Upstream
+
+on:
+  schedule:
+    # Run the workflow every day at midnight UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allow manual triggering of the workflow
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/gitbls/sdm.git
+          git fetch upstream
+
+      - name: Merge upstream changes
+        run: |
+          git checkout master # Replace 'main' with your default branch if different
+          git merge upstream/master
+
+      - name: Push changes to fork
+        run: |
+          git push origin main
